@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            animation: float 15s infinite linear;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 1s ease-out;
+            position: relative;
+            overflow: visible;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card::before {
+            content: '❤️';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 60px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.2); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            font-size: 1.3rem;
+            color: #555;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            font-size: 1.4rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            transform: scale(1);
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(238, 90, 36, 0.4);
+        }
+
+        /* The No button now runs around the whole screen */
+        .btn-no {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            position: fixed;
+            z-index: 1000;
+            left: 60%;
+            top: 60%;
+        }
+
+        .btn-no:hover {
+            /* No hover effect since it runs away */
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 182, 193, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-content {
+            text-align: center;
+            animation: bounceIn 1s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-content h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .success-content p {
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .big-heart {
+            font-size: 100px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .card { padding: 40px 20px; }
+            .btn { padding: 15px 35px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="card">
+            <h1>My Dearest Love</h1>
+            <p class="message">
+                Every moment with you is a treasure, every smile you give me lights up my world. 
+                This Valentine's Day, I want to ask you something special...
+            </p>
+            <h1 style="font-size: 2.5rem; margin: 20px 0;">Will You Be My Valentine?</h1>
+            
+            <div class="buttons" id="buttonContainer">
+                <button class="btn btn-yes" id="yesBtn" onclick="sayYes()">Yes! 💕</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- The No button is outside the card so it can run around the whole screen -->
+    <button class="btn btn-no" id="noBtn">No</button>
+
+    <!-- Success overlay -->
+    <div class="success-message" id="successMessage">
+        <div class="success-content">
+            <div class="big-heart">❤️</div>
+            <h2>You Said Yes!</h2>
+            <p>You've made me the happiest person alive!<br>I love you! 💕</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating hearts
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartSymbols = ['❤️', '💖', '💕', '💗', '💝'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 20000);
+            }, 300);
+        }
+
+        // Runaway button logic - runs around the entire screen
+        const noBtn = document.getElementById('noBtn');
+        let currentX = window.innerWidth * 0.6;
+        let currentY = window.innerHeight * 0.6;
+        let velocityX = 0;
+        let velocityY = 0;
+        const speed = 15; // How fast it runs
+        const escapeDistance = 200; // Distance to trigger running
+
+        function updateButtonPosition() {
+            // Apply velocity with momentum
+            currentX += velocityX;
+            currentY += velocityY;
+            
+            // Add friction so it doesn't fly off forever
+            velocityX *= 0.95;
+            velocityY *= 0.95;
+            
+            // Keep within screen bounds with padding
+            const padding = 20;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            
+            if (currentX < padding) {
+                currentX = padding;
+                velocityX = Math.abs(velocityX); // Bounce right
+            }
+            if (currentX > maxX) {
+                currentX = maxX;
+                velocityX = -Math.abs(velocityX); // Bounce left
+            }
+            if (currentY < padding) {
+                currentY = padding;
+                velocityY = Math.abs(velocityY); // Bounce down
+            }
+            if (currentY > maxY) {
+                currentY = maxY;
+                velocityY = -Math.abs(velocityY); // Bounce up
+            }
+            
+            noBtn.style.left = currentX + 'px';
+            noBtn.style.top = currentY + 'px';
+            
+            requestAnimationFrame(updateButtonPosition);
+        }
+
+        function moveAwayFromCursor(mouseX, mouseY) {
+            const btnRect = noBtn.getBoundingClientRect();
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            
+            const distX = mouseX - btnCenterX;
+            const distY = mouseY - btnCenterY;
+            const distance = Math.sqrt(distX * distX + distY * distY);
+            
+            // If cursor is too close, RUN AWAY!
+            if (distance < escapeDistance && distance > 0) {
+                // Calculate angle away from cursor
+                const angle = Math.atan2(distY, distX);
+                
+                // Add strong velocity in opposite direction
+                velocityX = -Math.cos(angle) * speed * (1 + Math.random());
+                velocityY = -Math.sin(angle) * speed * (1 + Math.random());
+                
+                // Add some randomness so it doesn't just go in straight lines
+                velocityX += (Math.random() - 0.5) * 5;
+                velocityY += (Math.random() - 0.5) * 5;
+                
+                // Rotate button while running
+                noBtn.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                noBtn.style.transition = 'transform 0.2s';
+            }
+        }
+
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            moveAwayFromCursor(e.clientX, e.clientY);
+        });
+
+        // Touch tracking for mobile
+        document.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            moveAwayFromCursor(touch.clientX, touch.clientY);
+        });
+
+        // Also move when clicking/tapping near it
+        document.addEventListener('click', (e) => {
+            moveAwayFromCursor(e.clientX, e.clientY);
+        });
+
+        // Start the animation loop
+        updateButtonPosition();
+
+        // Say yes function
+        function sayYes() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'flex';
+            
+            // Stop the no button from running
+            noBtn.style.display = 'none';
+            
+            // Create confetti explosion
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = ['#ff6b6b', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'][Math.floor(Math.random() * 5)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Initialize hearts
+        createHearts();
+    </script>
+</body>
+</html>
